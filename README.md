@@ -1,70 +1,90 @@
-# Getting Started with Create React App
+# demo-frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Build a docker Image
+> docker build -t shadabgada/demo-ui:1.0 .
 
-## Available Scripts
+Push to docker hub
+> docker push shadabgada/demo-ui:1.0
 
-In the project directory, you can run:
+<br>
 
-### `yarn start`
+### Kubernetes setup
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+<br>
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+1. Set virtualbox config variable
+    > minikube config set vm-driver virtualbox
 
-### `yarn test`
+2. Start minikube
+    > minikube start
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. check status
+    > minikube status
 
-### `yarn build`
+4. view minikube dashboard
+    > minikube dashboard
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+5. Clone both the repositories
+    - https://github.com/shadabgada/demo-backend
+    - https://github.com/shadabgada/demo-frontend
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+6. Goto demo-backend\kubernetes\ and run below command
+    > kubectl apply -f deployment.yml
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+7. Goto demo-frontend\kubernetes\ and run below command
+    > kubectl apply -f deployment.yml
 
-### `yarn eject`
+8. Run below command to enable ingress controller
+    > minikube addons enable ingress
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+9. You can use below commands to check POD, services or ingress status/details
+    - kubectl get pods
+    - kubectl get services
+    - kubectl get ingress
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+10. Run frontend services on your machine
+    > minikube service demo-frontend
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+    Here, we will just see the frontend message and not the backend message. I have explained its reason and solution below (Way 2)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+10. Run backend services on your machine
+    > minikube service springboot-k8s
 
-## Learn More
+<br>
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### In frontend POD we can access backend API in two ways, I have added both the ways
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+<br>
 
-### Code Splitting
+### Way 1: 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Goto Fronted POD and run below command
+> curl http://springboot-k8s:8080
 
-### Analyzing the Bundle Size
+where 'springboot-k8s' is the Backend POD exposing its rest API
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Output screenshot:
 
-### Making a Progressive Web App
+![image](1.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Way 2:
 
-### Advanced Configuration
+If we want to access the frontend on our browser, we need to work around below two problems
+- 1. Frontend will make a call to backend POD url that is not accessible in browser, hence it does not display backend response.
+- 2. As we are running both frontend and backend on same machine(i.e. localhost) we might face Chromes CORS issue.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+To resolve first issue I have added Ingress controller. The IP of ingress and corresponding host name are then added to /etc/hosts file. For details, [you can visit here](https://kubernetes.io/docs/tasks/access-application-cluster/ingress-minikube/)
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+For second issue, run below command to open Google chrome and enter the frontend url which we want to access
 
-### `yarn build` fails to minify
+> chrome.exe  --disable-site-isolation-trials --disable-web-security --user-data-dir="D:\temp"
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+ This solution will start chrome in an isolated sandbox and it will not affect the main chrome profile.
+
+ Output screenshot:
+
+![image](2.png)
+
+
+
