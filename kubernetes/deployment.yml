@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-frontend
+spec:
+  selector:
+    matchLabels:
+      app: demo-frontend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: demo-frontend
+    spec:
+      containers:
+        - name: demo-frontend
+          image: shadabgada/demo-ui:1.0
+          ports:
+            - containerPort: 3000
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: demo-frontend
+  labels:
+    name: demo-frontend
+spec:
+  ports:
+    - nodePort: 30170
+      port: 3000
+      targetPort: 3000
+      protocol: TCP
+  selector:
+    app: demo-frontend
+  type: LoadBalancer
