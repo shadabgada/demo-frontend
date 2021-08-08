@@ -77,6 +77,8 @@ For second issue, run below command to open Google chrome and enter the frontend
 
 > chrome.exe  --disable-site-isolation-trials --disable-web-security --user-data-dir="D:\temp"
 
+You can run it in a location where chrome.exe is present (i.e. C:\Program Files\Google\Chrome\Application in my case)
+
  This solution will start chrome in an isolated sandbox and it will not affect the main chrome profile.
 
  Output screenshot:
