@@ -10,8 +10,6 @@ Push to docker hub
 
 ### Kubernetes setup
 
-<br>
-
 1. Set virtualbox config variable
     > minikube config set vm-driver virtualbox
 
@@ -54,7 +52,6 @@ Push to docker hub
 
 ### In frontend POD we can access backend API in two ways, I have added both the ways
 
-<br>
 
 ### Way 1: 
 
