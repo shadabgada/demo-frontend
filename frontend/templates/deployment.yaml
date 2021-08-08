@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-frontend
+  labels:
+      {{- include "frontend.labels" . | nindent 4}}
+spec:
+  selector:
+    matchLabels:
+      {{- include "frontend.selectorLabels" . | nindent 6}}
+  replicas: {{.Values.replicaCount}}
+  template:
+    metadata:
+      labels:
+        {{- include "frontend.selectorLabels" . | nindent 8}}
+    spec:
+      containers:
+        - name: demo-frontend
+          image: {{.Values.image.repository}}
+          ports:
+            - containerPort: {{.Values.service.targetPort}}
