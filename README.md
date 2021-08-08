@@ -28,10 +28,10 @@ Push to docker hub
     - https://github.com/shadabgada/demo-backend
     - https://github.com/shadabgada/demo-frontend
 
-6. Goto demo-backend\kubernetes\ and run below command
+6. Goto demo-backend/kubernetes/ and run below command
     > kubectl apply -f deployment.yml
 
-7. Goto demo-frontend\kubernetes\ and run below command
+7. Goto demo-frontend/kubernetes/ and run below command
     > kubectl apply -f deployment.yml
 
 8. Run below command to enable ingress controller
@@ -45,7 +45,7 @@ Push to docker hub
 10. Run frontend services on your machine
     > minikube service demo-frontend
 
-    Here, we will just see the frontend message and not the backend message. I have explained its reason and solution below (Way 2)
+    Here, we will just see the frontend message and not the backend message. I have explained its reason and solution [below](#way-2)
 
 10. Run backend services on your machine
     > minikube service springboot-k8s
