@@ -85,5 +85,27 @@ You can run it in a location where chrome.exe is present (i.e. C:\Program Files\
 
 ![image](2.png)
 
+<br>
+
+### Bonus:
+
+Created a helm chart. Its available on branch helm-chart
+
+commands:
+
+- create helm chart
+  > helm create frontend
+- view formatted output helm yaml contents
+  > helm template test .\frontend\
+- deploy
+  > helm install frontend frontend/
+
+### Templatized parameters:
+- port
+- docker image
+- service name
+- service type
+- replica count
+- target port
 
 
